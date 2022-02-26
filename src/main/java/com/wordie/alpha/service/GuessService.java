@@ -7,9 +7,14 @@ import com.wordie.alpha.repo.WordsRepo;
 import com.wordie.alpha.request.GuessTheWordRequest;
 import com.wordie.alpha.response.GuessTheWordResponse;
 import com.wordie.alpha.utils.CommonUtils;
+import com.wordie.alpha.utils.Dictionary;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,28 +26,28 @@ public class GuessService {
     @Autowired
     private WordsRepo wordsRepo;
 
-    public GuessTheWordResponse guessTheWord(GuessTheWordRequest request, String sessionId) {
-        WordsEntryEntity wordEntry = wordsRepo.findOneBySessionId(sessionId);
+    public ResponseEntity<GuessTheWordResponse> guessTheWord(GuessTheWordRequest request) {
+        WordsEntryEntity wordEntry = wordsRepo.findOneByDate(LocalDate.now());//todo check if we could store it into some variable that refreshes after 24 hours
         Integer wordLength = request.getWordLength();
         String guessWord = request.getGuessWord();
-        if (wordEntry == null) {
-            String word = generateNewWord(wordLength);
-            wordEntry = new WordsEntryEntity(sessionId, word);
-            wordsRepo.save(wordEntry);
-        }
+
         if (isValidWord(guessWord, wordLength)) {
             List<Color> colorCoding = getColorCoding(guessWord, wordEntry.getTargetWord());
-            return new GuessTheWordResponse(colorCoding, MessageConstants.GUESS_THE_WORD_SUCCESS_RESPONSE);
+            GuessTheWordResponse successResponseBody = new GuessTheWordResponse(colorCoding, MessageConstants.GUESS_THE_WORD_SUCCESS_RESPONSE);
+            return ResponseEntity.status(HttpStatus.OK).body(successResponseBody);
         }
-        return new GuessTheWordResponse(MessageConstants.GUESS_THE_WORD_INVALID_RESPONSE);
-    }
-
-    private String generateNewWord(Integer length) {
-        return "TACIT";
+        GuessTheWordResponse noContentResponseBody = new GuessTheWordResponse(MessageConstants.GUESS_THE_WORD_SUCCESS_RESPONSE);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(noContentResponseBody);
     }
 
     private boolean isValidWord(String word, Integer length) {
-        return word.length() == length;//todo : add additional check that word is valid
+        try {
+            Dictionary dict = new Dictionary();
+            return word.length() == length && dict.contains(word);
+        } catch (IOException e) {
+
+        }
+        return false;
     }
 
     private List<Color> getColorCoding(String guessWord, String targetWord) {
