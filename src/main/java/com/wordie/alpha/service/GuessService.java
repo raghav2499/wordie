@@ -27,8 +27,8 @@ public class GuessService {
     private WordsRepo wordsRepo;
 
     public ResponseEntity<GuessTheWordResponse> guessTheWord(GuessTheWordRequest request) {
-//        WordsEntryEntity wordEntry = wordsRepo.findOneByDate(LocalDate.now());//todo check if we could store it into some variable that refreshes after 24 hours
-        WordsEntryEntity wordEntry = new WordsEntryEntity("TODAY", LocalDate.now());
+        WordsEntryEntity wordEntry = wordsRepo.findOneByDate(LocalDate.now());//todo check if we could store it into some variable that refreshes after 24 hours
+//        WordsEntryEntity wordEntry = new WordsEntryEntity("TODAY", LocalDate.now());
         Integer wordLength = request.getWordLength();
         String guessWord = request.getGuessWord();
 
