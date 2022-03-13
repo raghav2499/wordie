@@ -32,7 +32,6 @@ public class GuessService {
 
     public ResponseEntity<GuessTheWordResponse> guessTheWord(GuessTheWordRequest request) {
         WordsEntryEntity wordEntry = wordsRepo.findOneByDate(LocalDate.now());//todo check if we could store it into some variable that refreshes after 24 hours
-//        WordsEntryEntity wordEntry = new WordsEntryEntity("TODAY", LocalDate.now());
         Integer wordLength = request.getWordLength();
         String guessWord = request.getGuessWord();
 
@@ -48,7 +47,6 @@ public class GuessService {
     private boolean isValidWord(String word, Integer length) {
         try {
             Dictionary dict = new Dictionary();
-            logger.info("Word's length is " + word.length() + " and length " + length + " and dictionary contains " + dict.contains(word));
             return word.length() == length && dict.contains(word);
         } catch (IOException e) {
             logger.info("Exception occured while validating word " + e.getMessage());

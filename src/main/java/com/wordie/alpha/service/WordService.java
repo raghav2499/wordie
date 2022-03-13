@@ -27,8 +27,6 @@ public class WordService {
         LocalDate date = LocalDate.parse(request.getDate());
         WordsEntryEntity newWordEntry = new WordsEntryEntity(word, date);
         WordsEntryEntity savedWord = wordsRepo.save(newWordEntry);
-        logger.info("New word " + newWordEntry.getTargetWord() + " new word date " + newWordEntry.getDate()
-                + " and saved word " + savedWord.getTargetWord() + " saved word date " + savedWord.getDate());
         return ResponseEntity.status(HttpStatus.OK).body(MessageConstants.ADD_WORD_SUCCESS_MESSAGE);
     }
 }
