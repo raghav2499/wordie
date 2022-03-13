@@ -22,6 +22,8 @@ public class Dictionary {
 
     private static Set<String> wordsSet;
 
+    private static Set<String> testWordsSet;
+
     public Dictionary() throws IOException {
         ClassLoader cl = this.getClass().getClassLoader();
         InputStream inputStream = cl.getResourceAsStream("words_beta.txt");
@@ -32,11 +34,15 @@ public class Dictionary {
         logger.info("My content is " + contents);
         String[] words = contents.split("\r\n");
         wordsSet = new HashSet<>();
+        testWordsSet = new HashSet<>();
         Collections.addAll(wordsSet, words);
+        for(String word : wordsSet) {
+            Collections.addAll(testWordsSet, "s" + word + "e");
+        }
     }
 
     public boolean contains(String word) {
-        logger.info("My dictionary is " + wordsSet);
+        logger.info("My dictionary is " + testWordsSet);
         return wordsSet.contains(word);
     }
 }
