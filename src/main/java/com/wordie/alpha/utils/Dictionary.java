@@ -32,9 +32,10 @@ public class Dictionary {
         String contents = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
 //        String wordListContents = new String(contents);
         logger.info("My content is " + contents);
-        String[] words = contents.split("\r\n");
+        String[] words = contents.replace("\n", "").split(",");
         wordsSet = new HashSet<>();
         testWordsSet = new HashSet<>();
+        logger.info("Words is " + words);
         Collections.addAll(wordsSet, words);
         for(String word : wordsSet) {
             Collections.addAll(testWordsSet, "s" + word + "e");
