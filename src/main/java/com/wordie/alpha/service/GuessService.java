@@ -8,6 +8,8 @@ import com.wordie.alpha.request.GuessTheWordRequest;
 import com.wordie.alpha.response.GuessTheWordResponse;
 import com.wordie.alpha.utils.CommonUtils;
 import com.wordie.alpha.utils.Dictionary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ public class GuessService {
 
     @Autowired
     private WordsRepo wordsRepo;
+
+    Logger logger = LoggerFactory.getLogger(GuessService.class);
 
     public ResponseEntity<GuessTheWordResponse> guessTheWord(GuessTheWordRequest request) {
         WordsEntryEntity wordEntry = wordsRepo.findOneByDate(LocalDate.now());//todo check if we could store it into some variable that refreshes after 24 hours
@@ -44,9 +48,10 @@ public class GuessService {
     private boolean isValidWord(String word, Integer length) {
         try {
             Dictionary dict = new Dictionary();
+            logger.info("Word's length is " + word.length() + " and length " + length + " and dictionary contains " + dict.contains(word));
             return word.length() == length && dict.contains(word);
         } catch (IOException e) {
-
+            logger.info("Exception occured while validating word " + e.getMessage());
         }
         return false;
     }
