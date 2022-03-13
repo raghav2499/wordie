@@ -1,1 +1,1 @@
-web: java -jar target/alpha-0.0.1-SNAPSHOT.jar
+web: java -jar target/alpha-0.0.1-SNAPSHOT.jar --server.port=8080
