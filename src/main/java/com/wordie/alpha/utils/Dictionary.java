@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -23,7 +24,7 @@ public class Dictionary {
 
     public Dictionary() throws IOException {
         ClassLoader cl = this.getClass().getClassLoader();
-        InputStream inputStream = cl.getResourceAsStream("words_alpha.txt");
+        InputStream inputStream = cl.getResourceAsStream("words_beta.txt");
 //        Path path = Paths.get("alpha/src/main/resources/words_alpha.txt");
 //        byte[] readBytes = Files.readAllBytes(path);
         String contents = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
