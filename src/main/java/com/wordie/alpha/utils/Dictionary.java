@@ -24,9 +24,9 @@ public class Dictionary {
         ClassLoader cl = this.getClass().getClassLoader();
         InputStream inputStream = cl.getResourceAsStream("words_alpha.txt");
         String contents = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-        String[] words = contents.replace("\r\n", "").split(",");
+        String[] words = contents.replace("\n", "").replace("\r", "").split(",");
         dictionaryTrie = new Trie();
-        for(String word : words) {
+        for (String word : words) {
             dictionaryTrie.insert(word);
         }
     }
