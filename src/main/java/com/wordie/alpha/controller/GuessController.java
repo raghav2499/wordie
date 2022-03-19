@@ -4,7 +4,6 @@ import com.sun.istack.NotNull;
 import com.wordie.alpha.request.GuessTheWordRequest;
 import com.wordie.alpha.response.GuessTheWordResponse;
 import com.wordie.alpha.service.GuessService;
-import org.apache.tomcat.jni.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,9 @@ public class GuessController {
 
     @PostMapping(value = "/guess", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GuessTheWordResponse> guessTheWord(@NotNull @RequestBody GuessTheWordRequest request) {
-        long startTime = Time.now();
+        long startTime = System.currentTimeMillis();
         ResponseEntity response = guessService.guessTheWord(request);
-        logger.info("Time taken in guessing " + String.valueOf(Time.now() - startTime));
+        logger.info("Time taken in guessing " + String.valueOf(System.currentTimeMillis() - startTime));
         return response;
     }
 }
