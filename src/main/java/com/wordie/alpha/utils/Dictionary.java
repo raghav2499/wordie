@@ -1,37 +1,37 @@
 package com.wordie.alpha.utils;
 
-import com.wordie.alpha.service.WordService;
+import com.wordie.alpha.core.Trie;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
+@Component
 public class Dictionary {
 
     Logger logger = LoggerFactory.getLogger(Dictionary.class);
 
-    private static Set<String> wordsSet;
+    private static Trie dictionaryTrie;
 
-    private static Set<String> testWordsSet;
-
-    public Dictionary() throws IOException {
+    @PostConstruct
+    public void initialiseDict() throws IOException {
+        logger.info("Initialising dictionary on application startup");
         ClassLoader cl = this.getClass().getClassLoader();
         InputStream inputStream = cl.getResourceAsStream("words_alpha.txt");
-//        Path path = Paths.get("alpha/src/main/resources/words_alpha.txt");
-//        byte[] readBytes = Files.readAllBytes(path);
         String contents = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-        String[] words = contents.replace("\n", "").split(",");
-        wordsSet = new HashSet<>();
-        Collections.addAll(wordsSet, words);
+        String[] words = contents.replace("\r\n", "").split(",");
+        dictionaryTrie = new Trie();
+        for(String word : words) {
+            dictionaryTrie.insert(word);
+        }
     }
 
     public boolean contains(String word) {
-        return wordsSet.contains(word);
+        return dictionaryTrie.find(word);
     }
 }

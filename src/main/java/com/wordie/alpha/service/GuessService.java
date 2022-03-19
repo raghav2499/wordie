@@ -28,6 +28,9 @@ public class GuessService {
     @Autowired
     private WordsRepo wordsRepo;
 
+    @Autowired
+    private Dictionary dictionary;
+
     Logger logger = LoggerFactory.getLogger(GuessService.class);
 
     public ResponseEntity<GuessTheWordResponse> guessTheWord(GuessTheWordRequest request) {
@@ -41,20 +44,14 @@ public class GuessService {
             return ResponseEntity.status(HttpStatus.OK).body(successResponseBody);
         }
         GuessTheWordResponse noContentResponseBody = new GuessTheWordResponse(MessageConstants.GUESS_THE_WORD_SUCCESS_RESPONSE);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(noContentResponseBody);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(noContentResponseBody);
     }
 
     private boolean isValidWord(String word, Integer length) {
-        try {
-            Dictionary dict = new Dictionary();
-            return word.length() == length && dict.contains(word);
-        } catch (IOException e) {
-            logger.info("Exception occured while validating word " + e.getMessage());
-        }
-        return false;
+        return word.length() == length && dictionary.contains(word);
     }
 
-    private List<Color> getColorCoding(String guessWord, String targetWord) {
+    public List<Color> getColorCoding(String guessWord, String targetWord) {
         Integer wordLength = guessWord.length();
         List<Color> resultList = new ArrayList<Color>(Collections.nCopies(wordLength, Color.GREY));
         Map<Character, Integer> frequencyMap = CommonUtils.getFrequencyMap(targetWord);
@@ -72,7 +69,7 @@ public class GuessService {
                     && frequencyMap.containsKey(guessWord.charAt(iter))
                     && frequencyMap.get(guessWord.charAt(iter)) > 0) {
                 resultList.set(iter, Color.YELLOW);
-                frequencyMap.put(guessWord.charAt(iter), guessWord.charAt(iter) - 1);
+                frequencyMap.put(guessWord.charAt(iter), frequencyMap.get(guessWord.charAt(iter)) - 1);
             }
         }
 
