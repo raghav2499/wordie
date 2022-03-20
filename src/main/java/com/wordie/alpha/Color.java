@@ -11,4 +11,9 @@ public enum Color {
     Color(String color) {
         this.color = color;
     }
+
+    @Override
+    public String toString() {
+        return this.color;
+    }
 }

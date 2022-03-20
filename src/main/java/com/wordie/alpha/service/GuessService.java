@@ -37,7 +37,7 @@ public class GuessService {
         WordsEntryEntity wordEntry = wordsRepo.findOneByDate(LocalDate.now());//todo check if we could store it into some variable that refreshes after 24 hours
         Integer wordLength = request.getWordLength();
         String guessWord = request.getGuessWord();
-
+        logger.info("Guess word is " + guessWord + " and word length is " + wordLength);
         if (isValidWord(guessWord, wordLength)) {
             List<Color> colorCoding = getColorCoding(guessWord, wordEntry.getTargetWord());
             GuessTheWordResponse successResponseBody = new GuessTheWordResponse(colorCoding, MessageConstants.GUESS_THE_WORD_SUCCESS_RESPONSE);
@@ -65,11 +65,12 @@ public class GuessService {
         }
 
         for (int iter = 0; iter < wordLength; iter++) {
+            Character targetCharacter = targetWord.charAt(iter);
             if (resultList.get(iter) == Color.GREY
-                    && frequencyMap.containsKey(guessWord.charAt(iter))
-                    && frequencyMap.get(guessWord.charAt(iter)) > 0) {
+                    && frequencyMap.containsKey(targetCharacter)
+                    && frequencyMap.get(targetCharacter) > 0) {
                 resultList.set(iter, Color.YELLOW);
-                frequencyMap.put(guessWord.charAt(iter), frequencyMap.get(guessWord.charAt(iter)) - 1);
+                frequencyMap.put(guessWord.charAt(iter), frequencyMap.get(targetCharacter) - 1);
             }
         }
 
