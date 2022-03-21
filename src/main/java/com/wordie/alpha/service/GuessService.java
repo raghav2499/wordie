@@ -44,7 +44,7 @@ public class GuessService {
             return ResponseEntity.status(HttpStatus.OK).body(successResponseBody);
         }
         GuessTheWordResponse noContentResponseBody = new GuessTheWordResponse(MessageConstants.GUESS_THE_WORD_SUCCESS_RESPONSE);
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(noContentResponseBody);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(noContentResponseBody);
     }
 
     private boolean isValidWord(String word, Integer length) {
