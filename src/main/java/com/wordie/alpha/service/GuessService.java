@@ -65,12 +65,12 @@ public class GuessService {
         }
 
         for (int iter = 0; iter < wordLength; iter++) {
-            Character targetCharacter = targetWord.charAt(iter);
+            Character guessCharacter = guessWord.charAt(iter);
             if (resultList.get(iter) == Color.GREY
-                    && frequencyMap.containsKey(targetCharacter)
-                    && frequencyMap.get(targetCharacter) > 0) {
+                    && frequencyMap.containsKey(guessCharacter)
+                    && frequencyMap.get(guessCharacter) > 0) {
                 resultList.set(iter, Color.YELLOW);
-                frequencyMap.put(guessWord.charAt(iter), frequencyMap.get(targetCharacter) - 1);
+                frequencyMap.put(guessWord.charAt(iter), frequencyMap.get(guessCharacter) - 1);
             }
         }
 
